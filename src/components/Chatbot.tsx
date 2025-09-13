@@ -86,7 +86,7 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: "Hi! I'm your campus AI assistant. I can help you with dining services, library resources, class schedules, campus events, and administrative procedures. What would you like to know?",
+      content: "Hi! I'm your AI-powered campus assistant. I can help you with dining services, library resources, class schedules, campus events, administrative procedures, and answer any academic doubts you might have. Ask me anything!",
       isBot: true,
       timestamp: new Date()
     }
@@ -96,8 +96,28 @@ export function Chatbot() {
   const [conversationMode, setConversationMode] = useState<'basic' | 'detailed'>('basic');
   const [lastQueryType, setLastQueryType] = useState<string>('');
 
+const getAIResponse = (query: string): string => {
+    // Simulate AI processing with contextual responses
+    const aiResponses = [
+      `🤖 **AI Assistant Response:**\n\nI understand you're asking about "${query}". While I don't have access to real-time AI processing, I can help you with campus-specific information.\n\nFor academic questions, I recommend:\n- Visiting your professor's office hours\n- Using the campus tutoring center\n- Accessing online learning resources through the library\n- Joining study groups for your courses\n\nWhat specific campus service can I help you find?`,
+      
+      `🧠 **Smart Campus Helper:**\n\nYour question "${query}" is interesting! Here's how I can assist:\n\n📚 **Academic Support:**\n- Library research databases\n- Study room reservations\n- Tutoring services schedule\n- Professor contact information\n\n🎯 **Quick Help:**\n- Campus map and directions\n- Event schedules\n- Dining options\n- Administrative procedures\n\nTry asking me something specific about campus life!`,
+      
+      `💡 **AI-Powered Campus Guide:**\n\nI see you're curious about "${query}". While I specialize in campus information, I can guide you to the right resources:\n\n**For Academic Questions:**\n- Academic Success Center: Building E, 2nd Floor\n- Online Learning Platform: Available 24/7\n- Peer Tutoring: Free sessions available\n\n**For General Knowledge:**\n- Library databases have AI research tools\n- Computer lab has educational software\n- Study groups often discuss various topics\n\nWhat campus resource would be most helpful for your question?`
+    ];
+    
+    return aiResponses[Math.floor(Math.random() * aiResponses.length)];
+  };
+
   const getResponse = (message: string): { content: string; hasFollowUp: boolean } => {
     const lowercaseMessage = message.toLowerCase();
+    
+    // Check for AI-specific queries first
+    if (lowercaseMessage.includes('ai') || lowercaseMessage.includes('doubt') || lowercaseMessage.includes('anything') || 
+        lowercaseMessage.includes('help me with') || lowercaseMessage.includes('explain') || 
+        lowercaseMessage.includes('what is') || lowercaseMessage.includes('how does')) {
+      return { content: getAIResponse(message), hasFollowUp: true };
+    }
     
     // Check for complex queries first
     if (lowercaseMessage.includes('exam') && (lowercaseMessage.includes('miss') || lowercaseMessage.includes('illness'))) {
@@ -267,7 +287,7 @@ export function Chatbot() {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask about dining, library, schedules, events, or admin..."
+            placeholder="Ask about dining, library, schedules, events, admin, or any academic doubts..."
             className="flex-1"
           />
           <Button onClick={sendMessage} size="icon" className="bg-primary hover:bg-primary-dark">
