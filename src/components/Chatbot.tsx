@@ -50,7 +50,10 @@ const challengingQueries = [
   "What's the process for changing my major mid-semester?",
   "Can I get academic credit for internship work?",
   "How do I access mental health services on campus?",
-  "What should I do if I lose my student ID card?"
+  "What should I do if I lose my student ID card?",
+  "I'm absent today, can you email me the important topics?",
+  "How do I report my absence and get class materials?",
+  "I missed class due to illness, how do I get the lecture notes?"
 ];
 
 const complexQueryResponses = {
@@ -72,7 +75,11 @@ const complexQueryResponses = {
   
   mental: "🧠 **Mental Health Services**\n\n**Counseling Center**: Building D, 3rd Floor\n**Hours**: Mon-Fri 8 AM-5 PM\n**Crisis Line**: 24/7 at ext. 2000\n**Services**: Individual counseling, group therapy, crisis intervention\n\n**Appointment**: Online scheduling or walk-in during crisis\n**Confidential**: HIPAA protected\n**Cost**: Covered by student health fee",
   
-  id: "🆔 **Lost Student ID Replacement**\n\n**Immediate**: Report lost card to Campus Card Office\n**Cost**: $25 replacement fee\n**Process**: Bring photo ID to Card Office (Student Union, 1st Floor)\n**Hours**: Mon-Fri 9 AM-4 PM\n**Time**: New card printed while you wait\n\n**Tip**: Temporarily access buildings through Campus Safety with photo ID"
+  id: "🆔 **Lost Student ID Replacement**\n\n**Immediate**: Report lost card to Campus Card Office\n**Cost**: $25 replacement fee\n**Process**: Bring photo ID to Card Office (Student Union, 1st Floor)\n**Hours**: Mon-Fri 9 AM-4 PM\n**Time**: New card printed while you wait\n\n**Tip**: Temporarily access buildings through Campus Safety with photo ID",
+  
+  absence: "📧 **Absence Reporting & Class Materials**\n\n**Report Absence**: Email absence@campus.edu with:\n- Student ID and full name\n- Course names and section numbers\n- Reason for absence (illness, emergency, etc.)\n- Expected return date\n\n**Automatic Email Service**: \n✅ Important topics and announcements sent within 2 hours\n✅ Lecture summaries and key points\n✅ Assignment deadlines and updates\n✅ Reading materials and resources\n\n**Professor Notification**: Your instructors are automatically notified\n**Make-up Work**: Contact professors within 48 hours for missed assignments\n\n**Emergency Absence**: Call Campus Support (ext. 1111) for same-day reporting",
+  
+  classNotes: "📚 **Missed Class Materials Recovery**\n\n**Immediate Access** (within 30 minutes):\n- Today's lecture recordings available on Student Portal\n- Slide presentations automatically uploaded\n- Reading assignments and homework posted\n\n**Email Summary Service**:\n📨 **Sent to your student email**:\n- Key concepts covered in class\n- Important announcements\n- Upcoming deadlines\n- Study group information\n- Professor's additional notes\n\n**Peer Study Network**: Connect with assigned study buddies\n**Office Hours**: Professors available for catch-up sessions\n\n**Next Steps**: Check email within 1 hour for complete materials package"
 };
 
 export function Chatbot() {
@@ -113,6 +120,10 @@ export function Chatbot() {
       return { content: complexQueryResponses.mental, hasFollowUp: false };
     } else if (lowercaseMessage.includes('lost') && lowercaseMessage.includes('id')) {
       return { content: complexQueryResponses.id, hasFollowUp: false };
+    } else if ((lowercaseMessage.includes('absent') || lowercaseMessage.includes('absence')) && (lowercaseMessage.includes('email') || lowercaseMessage.includes('topics'))) {
+      return { content: complexQueryResponses.absence, hasFollowUp: false };
+    } else if (lowercaseMessage.includes('miss') && (lowercaseMessage.includes('class') || lowercaseMessage.includes('lecture') || lowercaseMessage.includes('notes'))) {
+      return { content: complexQueryResponses.classNotes, hasFollowUp: false };
     }
     
     // Standard category responses with complexity modes
